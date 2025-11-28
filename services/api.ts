@@ -12,23 +12,30 @@ export const fetchMovies = async ({
 }: {
   query: string;
 }): Promise<Movie[]> => {
-  // If query is empty, fetch popular movies
-  // If query is not empty, fetch movies that match the query
-  const endpoint = query
+  const pagesToFetch = 5;
+  const allMovies: Movie[] = [];
+
+  const endpointBase = query
     ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
     : `${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`;
 
-  const response = await fetch(endpoint, {
-    method: "GET",
-    headers: TMDB_CONFIG.headers,
-  });
+  for (let page = 1; page <= pagesToFetch; page++) {
+    const endpoint = `${endpointBase}&page=${page}`;
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch movies: ${response.statusText}`);
+    const response = await fetch(endpoint, {
+      method: "GET",
+      headers: TMDB_CONFIG.headers,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch movies: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    allMovies.push(...data.results);
   }
 
-  const data = await response.json();
-  return data.results;
+  return allMovies;
 };
 
 export const fetchMovieDetails = async (
