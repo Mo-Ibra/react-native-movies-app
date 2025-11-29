@@ -1,7 +1,7 @@
 import { Client, TablesDB, ID, Query } from "react-native-appwrite";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
-const TABLE_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
+const TABLE_ID = process.env.EXPO_PUBLIC_APPWRITE_TABLE_ID!;
 
 const client = new Client()
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
